@@ -1,5 +1,6 @@
-package guru.springframework.jdbc.dao;
+package guru.springframework.jdbc.dao.impl;
 
+import guru.springframework.jdbc.dao.AuthorDao;
 import guru.springframework.jdbc.domain.Author;
 import org.springframework.stereotype.Component;
 
