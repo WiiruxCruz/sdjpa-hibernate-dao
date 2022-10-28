@@ -28,6 +28,14 @@ public class DaoIntegrationTest {
     AuthorDao authorDao;
     
     @Test
+    void findAll() {
+    	List<Author> authors = authorDao.findAll();
+    	assertThat(authors).isNotNull();
+    	assertThat(authors.size()).isGreaterThan(0);
+    }
+    
+    
+    @Test
     void testListAuthorByLastNameLike() {
     	List<Author> authors = authorDao.listaAuthorByLastName("Wall");
     	

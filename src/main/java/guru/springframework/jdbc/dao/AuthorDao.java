@@ -8,7 +8,9 @@ import guru.springframework.jdbc.domain.Author;
  * Created by jt on 8/22/21.
  */
 public interface AuthorDao {
-    List<Author> listaAuthorByLastName(String lastName);
+    List<Author> findAll(); 
+	
+	List<Author> listaAuthorByLastName(String lastName);
 	
 	Author getById(Long id);
 
