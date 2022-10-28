@@ -6,7 +6,9 @@ import guru.springframework.jdbc.dao.BookDao;
 import guru.springframework.jdbc.domain.Book;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+import net.bytebuddy.utility.RandomString;
 
 @Component
 public class BookDaoImpl implements BookDao{
@@ -15,6 +17,28 @@ public class BookDaoImpl implements BookDao{
 	
 	public BookDaoImpl(EntityManagerFactory emf) {
 		this.emf = emf;
+	}
+	
+	@Override
+	public Book findByISBN(String isbn) {
+		// TODO Auto-generated method stub
+		EntityManager em = getEntityManager();
+		
+		try {
+			/*
+			Query query = em.createQuery("SELECT b FROM Book b WHERE b.isbn = :isbn");
+			query.setParameter("isbn", isbn);
+			
+			Book book = (Book) query.getSingleResult();
+			*/
+			TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b WHERE b.isbn = :isbn", Book.class);
+			query.setParameter("isbn", isbn);
+			Book book = query.getSingleResult();
+			return book;
+		} finally {
+			em.close();
+		}
+		
 	}
 
 	@Override
@@ -81,5 +105,4 @@ public class BookDaoImpl implements BookDao{
 	private EntityManager getEntityManager() {
 		return emf.createEntityManager();
 	}
-
 }

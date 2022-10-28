@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import guru.springframework.jdbc.dao.BookDao;
 import guru.springframework.jdbc.domain.Author;
 import guru.springframework.jdbc.domain.Book;
+import net.bytebuddy.utility.RandomString;
 
 @ActiveProfiles("local")
 @DataJpaTest
@@ -21,6 +22,19 @@ import guru.springframework.jdbc.domain.Book;
 public class BookDaoIntegrationTest {
 	@Autowired
 	BookDao bd;
+	
+	
+	@Test
+	void testFindByIsbn() {
+		Book book = new Book();
+		book.setIsbn(RandomString.make());
+		book.setTitle("ISBN TEST");
+		
+		Book saved = bd.saveNewBook(book);
+		
+		Book fetched = bd.findByISBN(saved.getIsbn());
+		assertThat(fetched.getIsbn()).isNotNull();
+	}
 	
 	@Test
 	void testDeleteBook() {
