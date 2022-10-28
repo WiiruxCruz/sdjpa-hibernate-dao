@@ -89,6 +89,13 @@ public class DaoIntegrationTest {
 
         assertThat(author).isNotNull();
     }
+    
+    @Test
+    void testGetAuthorByNameCriteria() {
+        Author author = authorDao.findAuthorByNameCriteria("Craig", "Walls");
+
+        assertThat(author).isNotNull();
+    }
 
     @Test
     void testGetAuthor() {
