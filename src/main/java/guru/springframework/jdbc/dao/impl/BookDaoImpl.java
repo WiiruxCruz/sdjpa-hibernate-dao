@@ -1,5 +1,7 @@
 package guru.springframework.jdbc.dao.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import guru.springframework.jdbc.dao.BookDao;
@@ -17,6 +19,19 @@ public class BookDaoImpl implements BookDao{
 	
 	public BookDaoImpl(EntityManagerFactory emf) {
 		this.emf = emf;
+	}
+	
+	@Override
+	public List<Book> findAll() {
+		EntityManager em = getEntityManager();
+		try {
+			TypedQuery<Book> typedQuery = em.createNamedQuery("book_find_all", Book.class);
+			List<Book> books =  typedQuery.getResultList();
+			return books;
+		} finally {
+			em.close();
+		}
+		
 	}
 	
 	@Override
@@ -54,14 +69,21 @@ public class BookDaoImpl implements BookDao{
 	public Book findBookByTitle(String title) {
 		// TODO Auto-generated method stub
 		EntityManager em = getEntityManager();
-		TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b "
-				+ "WHERE b.title = :title", Book.class);
-		query.setParameter("title", title);
 		
-		Book book = query.getSingleResult();
-		em.close();
-		
-		return book;
+		try {
+			TypedQuery<Book> typedQuery = em.createNamedQuery("find_by_title", Book.class);
+			typedQuery.setParameter("title", title);
+			Book book = typedQuery.getSingleResult();
+			
+			
+			return book;
+		} finally {
+			em.close();
+		}
+		//TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b "
+				//+ "WHERE b.title = :title", Book.class);
+		//query.setParameter("title", title);
+		//Book book = query.getSingleResult();
 	}
 
 	@Override

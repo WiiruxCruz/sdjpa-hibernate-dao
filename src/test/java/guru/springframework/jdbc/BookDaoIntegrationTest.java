@@ -2,6 +2,8 @@ package guru.springframework.jdbc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -23,6 +25,14 @@ public class BookDaoIntegrationTest {
 	@Autowired
 	BookDao bd;
 	
+	
+	@Test
+	void testFindAll() {
+		List<Book> books = bd.findAll();
+		
+		assertThat(books).isNotNull();
+		assertThat(books.size()).isGreaterThan(0);
+	}
 	
 	@Test
 	void testFindByIsbn() {
