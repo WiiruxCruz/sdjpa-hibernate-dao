@@ -112,4 +112,13 @@ public class BookDaoIntegrationTest {
 		Book book = bd.findBookByTitle("Clean Code");
 		assertThat(book).isNotNull();
 	}
+	
+	@Test
+	void testGetBookByTitleCriteria() {
+		Book book = bd.findBookByTitleCriteria("Clean Code");
+		assertThat(book).isNotNull();
+		assertThat(book.getTitle()).isNotNull();
+		assertThat(book.getTitle()).isEqualTo("Clean Code");
+		System.out.println("--------------------->" + book.getTitle());
+	}
 }

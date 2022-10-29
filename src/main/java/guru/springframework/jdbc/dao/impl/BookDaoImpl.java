@@ -10,6 +10,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.ParameterExpression;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import net.bytebuddy.utility.RandomString;
 
 @Component
@@ -84,6 +89,33 @@ public class BookDaoImpl implements BookDao{
 				//+ "WHERE b.title = :title", Book.class);
 		//query.setParameter("title", title);
 		//Book book = query.getSingleResult();
+	}
+	
+	@Override
+	public Book findBookByTitleCriteria(String title) {
+		EntityManager em = getEntityManager();
+		
+		try {
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+			CriteriaQuery<Book> cq = cb.createQuery(Book.class);
+			
+			Root<Book> root = cq.from(Book.class);
+			
+			ParameterExpression<String> titleParam = cb.parameter(String.class);
+			
+			Predicate titlePred = cb.equal(root.get("title"), titleParam);
+			
+			cq.select(root).where(titlePred);
+			
+			TypedQuery<Book> typedQuery = em.createQuery(cq);
+			typedQuery.setParameter(titleParam, title);
+			Book book = typedQuery.getSingleResult();
+			
+			
+			return book;
+		} finally {
+			em.close();
+		}
 	}
 
 	@Override
